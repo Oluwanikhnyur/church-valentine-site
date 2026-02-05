@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>We’ve Got You Covered 🤍</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <div class="bg-aurora" aria-hidden="true"></div>
+    <div class="hearts" aria-hidden="true"></div>
+
+  <main class="card">
+    <!-- Sticky Valentine Countdown -->
+    <div id="valBanner" class="deadline sticky" role="status" aria-live="polite">
+      <strong>Loading Valentine deadline…</strong>
+    </div>
+
+    <a class="back" href="index.html">← Back</a>
+
+    <h1>We’ve Got You Covered 🤍</h1>
+
+    <p class="lead">
+      No Valentine partner? No worries at all — <strong>you’re not alone</strong>.
+    </p>
+
+    <p>
+      Love is in the air and we’re making sure everyone gets to feel it <br>
+Sign up and we’ll pair you with someone for a Valentine gift exchange <br>
+You give a gift, you receive a gift — simple math, sweet outcome 😍🍫✨
+    </p>
+
+    <div class="notice">
+      Your information will only be used for this Valentine exchange and will be kept private.
+    </div>
+
+    <!-- Google Form Embed (Native feel wrapper) -->
+    <section class="form-wrap">
+      <h2 class="form-title">Valentine Exchange Form</h2>
+      <p class="form-subtitle">Fill this in once. After submitting, you’ll see a confirmation message.</p>
+
+      <div class="form-frame">
+        <div class="form-loading" aria-hidden="true">
+          <div class="shimmer"></div>
+          <p>Loading form…</p>
+        </div>
+
+        <iframe
+          id="valForm"
+          src="https://docs.google.com/forms/d/e/1FAIpQLSfQZ45kBGM5QQZerWA1RBwXu6lpXBnH15wdj63VyOFPrIFq9w/viewform?embedded=true"
+          title="Valentine Exchange Form"
+          loading="lazy"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </section>
+
+    <p class="footer-note">Thank you for being part of it 💛</p>
+  </main>
+
+  <!-- 1) Hide loader when iframe is ready -->
+  <script>
+    const frame = document.getElementById("valForm");
+    const wrap = document.querySelector(".form-frame");
+    if (frame && wrap) {
+      frame.addEventListener("load", () => wrap.classList.add("loaded"));
+    }
+  </script>
+
+  <!-- 2) Countdown banner (with seconds) -->
+  <script>
+    (function(){
+      const el = document.getElementById("valBanner");
+      if(!el) return;
+
+      function pad(n){ return String(n).padStart(2,"0"); }
+
+      function getDeadline(now){
+        const year = now.getFullYear();
+        // Feb 14, 23:59:59 local time
+        return new Date(year, 1, 14, 23, 59, 59);
+      }
+
+      function update(){
+        const now = new Date();
+        const deadline = getDeadline(now);
+        const year = now.getFullYear();
+
+        if(now > deadline){
+          el.classList.remove("open");
+          el.innerHTML = `<strong>Valentine Exchange is now closed 💛</strong>`;
+          return;
+        }
+
+        el.classList.add("open");
+
+        const diff = deadline - now;
+        const totalSeconds = Math.floor(diff / 1000);
+
+        const days = Math.floor(totalSeconds / (60 * 60 * 24));
+        const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
+        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+        const seconds = totalSeconds % 60;
+
+        el.innerHTML = `
+          Valentine Exchange closes on <strong>Feb 14, ${year}</strong> —
+          <strong>${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s</strong> left
+        `;
+      }
+
+      update();
+      setInterval(update, 1000);
+    })();
+  </script>
+
+  <!-- 3) Lock the form on/after Valentine’s deadline (same rule as banner) -->
+  <script>
+    (function(){
+      const wrap = document.querySelector(".form-wrap");
+      if(!wrap) return;
+
+      const now = new Date();
+      const year = now.getFullYear();
+      const deadline = new Date(year, 1, 14, 23, 59, 59);
+
+      if (now > deadline) {
+        wrap.innerHTML = `
+          <div class="notice">
+            Submissions are closed. Thank you for your interest 💛
+          </div>
+        `;
+      }
+    })();
+  </script>
+
+</body>
+</html>
