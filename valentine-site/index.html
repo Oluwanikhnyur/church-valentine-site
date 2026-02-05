@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Valentine — Church Youth</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <div class="bg-aurora" aria-hidden="true"></div>
+    <div class="hearts" aria-hidden="true"></div>
+
+  <main class="card">
+    <!-- Sticky Valentine Countdown -->
+    <div id="valBanner" class="deadline sticky" role="status" aria-live="polite">
+      <strong>Loading Valentine deadline…</strong>
+    </div>
+
+    <div class="badge">💙 RCCG Dominion Court Youth Church</div>
+
+    <h1>Valentine’s Day: Let’s Share the Love 💕</h1>
+    <p class="lead">
+      Valentine’s season is all about love, appreciation, and connection <br>
+Whether you’re single, taken, or “it’s complicated” 😄 — we’re making sure <strong>no one is left out</strong>. <br>
+Sign up to be matched for a fun Valentine gift exchange and spread the love
+    </p>
+
+    <div class="question">
+      <h2> <strong>Are you already exchanging Valentine gifts with someone? 👀</strong></h2>
+    </div>
+
+    <div class="actions">
+      <a class="btn primary" href="yes.html">Yes, I do 💘</a>
+      <a class="btn secondary" href="no.html">No, match me 🥰</a>
+    </div>
+<br><br><br>
+    <p class="footer-note"><strong>Made with love because everyone deserves one 💝</strong></p>
+  </main>
+
+  <!-- Countdown script (with seconds) -->
+  <script>
+    (function(){
+      const el = document.getElementById("valBanner");
+      if(!el) return;
+
+      function pad(n){ return String(n).padStart(2,"0"); }
+
+      function getDeadline(now){
+        const year = now.getFullYear();
+        // Feb 14, 23:59:59 local time
+        return new Date(year, 1, 14, 23, 59, 59); // 1 = Feb (0-based months)
+      }
+
+      function update(){
+        const now = new Date();
+        const deadline = getDeadline(now);
+        const year = now.getFullYear();
+
+        if(now > deadline){
+          el.classList.remove("open");
+          el.innerHTML = `<strong>Valentine Exchange is now closed 💛</strong>`;
+          return;
+        }
+
+        el.classList.add("open");
+
+        const diff = deadline - now;
+        const totalSeconds = Math.floor(diff / 1000);
+
+        const days = Math.floor(totalSeconds / (60 * 60 * 24));
+        const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
+        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+        const seconds = totalSeconds % 60;
+
+        el.innerHTML = `
+          Valentine Exchange closes on <strong>Feb 14, ${year}</strong> —
+          <strong>${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s</strong> left
+        `;
+      }
+
+      update();
+      setInterval(update, 1000);
+    })();
+  </script>
+</body>
+</html>
